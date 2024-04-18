@@ -19,6 +19,7 @@ This is a .Net Maui application that demonstrates how to set page full screen an
 
 <p>
     <img src="https://github.com/ne0rrmatrix/MauiFullScreen/assets/4167863/b6aba29d-4a93-428d-825e-b689a9aa4d56/100/100" hspace="10" width="65%" >
+    <p>
     <img src="https://github.com/ne0rrmatrix/MauiFullScreen/assets/4167863/cbb3a5af-54dc-461d-a769-8044a25480cf/100/100" hspace="10" width="65%" >
 </p>
 
