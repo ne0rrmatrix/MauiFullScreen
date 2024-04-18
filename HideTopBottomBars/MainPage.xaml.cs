@@ -27,13 +27,11 @@ public partial class MainPage : ContentPage, IDisposable
 		{
 			customControls.Show();
 			showBars = false;
-			System.Diagnostics.Debug.WriteLine("showBars: " + showBars);
 		}
 		else
 		{
 			customControls.Hide();
 			showBars = true;
-			System.Diagnostics.Debug.WriteLine("showBars: " + showBars);
 		}
 	}
 
