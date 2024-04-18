@@ -1,11 +1,20 @@
-﻿using HideTopBottomBars.CustomControls;
+﻿using System.Runtime.InteropServices;
+using HideTopBottomBars.CustomControls;
+using Microsoft.Win32.SafeHandles;
 
 namespace HideTopBottomBars;
 
-public partial class MainPage : ContentPage
+public partial class MainPage : ContentPage, IDisposable
 {
 	bool showBars = false;
+	bool disposedValue;
+	SafeHandle? safeHandle = new SafeFileHandle(IntPtr.Zero, true);
+#if ANDROID
+	
+	readonly CustomControl customControls = new(Platform.AppContext, null, 0, 0);
+#else
 	readonly CustomControl customControls = new();
+#endif
 
     public MainPage()
     {
@@ -14,7 +23,6 @@ public partial class MainPage : ContentPage
 
 	void OnHideBarsClicked(object sender, EventArgs e)
 	{
-		System.Diagnostics.Debug.WriteLine("OnHideBarsClicked");
 		if(showBars)
 		{
 			customControls.Show();
@@ -26,6 +34,26 @@ public partial class MainPage : ContentPage
 			customControls.Hide();
 			showBars = true;
 			System.Diagnostics.Debug.WriteLine("showBars: " + showBars);
+		}
+	}
+
+	public void Dispose()
+	{
+		Dispose(true);
+		GC.SuppressFinalize(this);
+	}
+
+	protected virtual void Dispose(bool disposing)
+	{
+		if (!disposedValue)
+		{
+			if (disposing)
+			{
+				safeHandle?.Dispose();
+				safeHandle = null;
+			}
+
+			disposedValue = true;
 		}
 	}
 }

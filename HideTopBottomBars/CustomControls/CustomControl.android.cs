@@ -5,31 +5,44 @@ using Android.Views;
 using Android.Content.Res;
 using Activity = Android.App.Activity;
 using PageExtensions = HideTopBottomBars.Extensions.PageExtensions;
+using Android.Runtime;
+using Android.Widget;
+using Android.Content;
+using Android.Util;
 
 namespace HideTopBottomBars.CustomControls;
 
-public class CustomControl : ICustomControl
+public class CustomControl : RelativeLayout, ICustomControl
 {
 	int defaultSystemUiVisibility;
-	public CustomControl()
-    {
+	bool isFullScreen;
+
+	public CustomControl(Context? context, IAttributeSet? attrs, int defStyleAttr, int defStyleRes) : base(context, attrs, defStyleAttr, defStyleRes)
+	{
 	}
 
+	/// <inheritdoc/>
 	public void Hide()
 	{
 		SetSystemBarsVisibility(true);
+		isFullScreen = true;
 		TransparentStatusBar();
 		PageExtensions.SetBarStatus(false);
 	}
 
+	/// <inheritdoc/>
 	public void Show()
 	{
 		SetSystemBarsVisibility(false);
 		RegularStatusBar();
+		isFullScreen = false;
 		PageExtensions.SetBarStatus(true);
 
 	}
 
+	/// <summary>
+	/// Sets the status bar to transparent
+	/// </summary>
 	public void TransparentStatusBar()
 	{
 		var activity = Platform.CurrentActivity;
@@ -43,6 +56,9 @@ public class CustomControl : ICustomControl
 		activity.Window.SetNavigationBarColor(Android.Graphics.Color.Transparent);
 	}
 
+	/// <summary>
+	/// Sets the status bar to regular
+	/// </summary>
 	public void RegularStatusBar()
 	{
 		var activity = Platform.CurrentActivity;
@@ -147,5 +163,19 @@ public class CustomControl : ICustomControl
 		}
 
 		return (currentActivity, currentWindow, currentResources, configuration);
+	}
+
+	/// <summary>
+	/// Checks the visibility of the view
+	/// </summary>
+	/// <param name="changedView"></param>
+	/// <param name="visibility"></param>
+	protected override void OnVisibilityChanged(Android.Views.View changedView, [GeneratedEnum] ViewStates visibility)
+	{
+		base.OnVisibilityChanged(changedView, visibility);
+		if (isFullScreen && visibility == ViewStates.Visible)
+		{
+			SetSystemBarsVisibility(false);
+		}
 	}
 }

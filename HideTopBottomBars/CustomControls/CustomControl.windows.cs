@@ -18,6 +18,7 @@ class CustomControl : ICustomControl
 	protected static Page CurrentPage =>
 		PageExtensions.GetCurrentPage(Application.Current?.MainPage ?? throw new InvalidOperationException($"{nameof(Application.Current.MainPage)} cannot be null."));
 
+	/// <inheritdoc/>
 	public void Hide()
 	{
 		PageExtensions.SetBarStatus(false);
@@ -25,6 +26,7 @@ class CustomControl : ICustomControl
 		appWindow.SetPresenter(AppWindowPresenterKind.FullScreen);
 	}
 
+	/// <inheritdoc/>
 	public void Show()
 	{
 		PageExtensions.SetBarStatus(true);
